@@ -22,6 +22,8 @@ class App extends React.Component {
     error: false,
   };
 
+  abutResult = React.createRef();
+
   getURL = (pageNumber) => {
     let url = "/?";
     if (this.state.category) url += `category=${this.state.category}`;
@@ -30,11 +32,6 @@ class App extends React.Component {
     if (pageNumber) url += `&page=${pageNumber}`;
 
     return url;
-  };
-
-  getNews = () => {
-    const { data } = axios.get(this.getURL());
-    return data;
   };
 
   getData = (pageNumber) => {
@@ -72,6 +69,10 @@ class App extends React.Component {
     ) {
       this.getData(currPage);
     }
+  };
+
+  goToTop = () => {
+    window.scroll(0, this.abutResult.current.scrollTop);
   };
 
   changeCategory = (category) => {
@@ -148,7 +149,7 @@ class App extends React.Component {
               search={this.search}
             />
             {!this.state.isLoading && !this.state.error && (
-              <div className="d-flex">
+              <div className="d-flex" ref={this.abutResult}>
                 <p className="text-black-50">
                   About {this.state.totalResults} Results Found
                 </p>
@@ -174,6 +175,12 @@ class App extends React.Component {
                     setCurentPage={this.setCurentPage}
                   />
                 )}
+                <button
+                  className="btn btn-secondary my-3"
+                  onClick={this.goToTop}
+                >
+                  Go To Top
+                </button>
               </div>
             )}
           </div>

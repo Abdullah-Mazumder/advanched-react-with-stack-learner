@@ -8,9 +8,15 @@ export class Header extends Component {
     searchTerm: "",
   };
 
+  searchRef = React.createRef();
+
   handleChange = (e) => {
     this.setState({ searchTerm: e.target.value });
   };
+
+  componentDidMount = () => {
+    this.searchRef.current.focus();
+  }
 
   render() {
     const { category, search } = this.props;
@@ -20,6 +26,7 @@ export class Header extends Component {
           Block Bluster Headlines
         </h1>
         <input
+        ref={this.searchRef}
           type="search"
           value={this.state.searchTerm}
           className="form-control"
