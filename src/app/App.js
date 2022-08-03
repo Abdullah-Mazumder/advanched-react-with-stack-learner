@@ -64,8 +64,12 @@ class App extends React.Component {
     this.getData(currPage);
   };
 
-  componentDidUpdate = (prevProps, prevState) => {
-    if (this.state.category !== prevState.category) {
+  componentDidUpdate = (_prevProps, prevState) => {
+    if (
+      this.state.category !== prevState.category ||
+      this.state.currentPage !== prevState.currentPage ||
+      this.state.searchTerm !== prevState.searchTerm
+    ) {
       this.getData(currPage);
     }
   };
@@ -74,6 +78,7 @@ class App extends React.Component {
     currPage = 1;
     this.setState(
       {
+        searchTerm: "",
         data: [],
         isLoading: true,
         category: category,
@@ -93,8 +98,6 @@ class App extends React.Component {
         isLoading: true,
         currentPage: currPage,
       });
-
-      this.getData(currPage);
     }
   };
 
@@ -106,8 +109,6 @@ class App extends React.Component {
         isLoading: true,
         currentPage: currPage,
       });
-
-      this.getData(currPage);
     }
   };
 
@@ -128,17 +129,24 @@ class App extends React.Component {
         error: false,
         currentPage: currPage,
       });
-      this.getData(currPage);
     }
   };
 
+  search = (term) => {
+    this.setState({ searchTerm: term, data: [], isLoading: true });
+  };
+
   render() {
-    const { data, category, searchTerm, currentPage, totalPage } = this.state;
+    const { data, category, currentPage, totalPage } = this.state;
     return (
       <div className="container">
         <div className="row">
           <div className="col-sm-6 offset-md-3">
-            <Header category={category} changeCategory={this.changeCategory} />
+            <Header
+              category={category}
+              changeCategory={this.changeCategory}
+              search={this.search}
+            />
             {!this.state.isLoading && !this.state.error && (
               <div className="d-flex">
                 <p className="text-black-50">

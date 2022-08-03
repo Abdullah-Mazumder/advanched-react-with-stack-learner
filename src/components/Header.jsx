@@ -12,10 +12,8 @@ export class Header extends Component {
     this.setState({ searchTerm: e.target.value });
   };
 
-  handleKeyPress = () => {};
-
   render() {
-    const { category } = this.props;
+    const { category, search } = this.props;
     return (
       <div className="my-4">
         <h1 className="mb-4" style={{ fontWeight: "300" }}>
@@ -27,7 +25,11 @@ export class Header extends Component {
           className="form-control"
           placeholder="Type anything and press enter to search"
           onChange={this.handleChange}
-          onKeyPress={this.handleKeyPress}
+          onKeyPress={(e) => {
+            if (e.key === "Enter") {
+              search(e.target.value);
+            }
+          }}
         />
         <div className="my-4">
           {newsCategory &&
@@ -47,7 +49,10 @@ export class Header extends Component {
               }
               return (
                 <button
-                  onClick={() => this.props.changeCategory(newsCategory[item])}
+                  onClick={() => {
+                    this.props.changeCategory(newsCategory[item])
+                    this.setState({searchTerm: ''})
+                  }}
                   key={shortid.generate()}
                   className="btn btn-sm  btn-light mr-2 mb-2"
                 >
